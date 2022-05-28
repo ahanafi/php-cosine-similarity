@@ -1,0 +1,112 @@
+textarea {
+    resize: none !important;
+}
+
+.wizard-steps .wizard-step.wizard-step-active:before,
+.wizard-steps .wizard-step:before {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+.bigger-text {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+}
+
+ul.sidebar-menu > li.active {
+    background: #1369db !important;
+}
+
+ul.sidebar-menu > li.active > a {
+    color: #fff !important;
+}
+
+.sidebar-brand > a {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.text-money {
+    text-align: right !important;
+    font-style: italic !important;
+}
+
+#app {
+    background: #f0f0f0 !important;
+}
+
+.main-sidebar .sidebar-brand {
+    height: 70px !important;
+}
+
+.table > thead, .table > thead > tr {
+    background: #f0f0f0;
+}
+
+.table-bordered tbody tr td, .table-bordered > thead > tr > th,
+.table-bordered tfoot tr td {
+    border: 1px solid #d3d3d3 !important;
+}
+
+tfoot, tfoot tr {
+    background: #f0f0f0;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a{
+    box-shadow: none !important;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #a4a5a6 !important;
+    font-style: italic;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #a4a5a6 !important;
+    font-style: italic;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #a4a5a6 !important;
+    font-style: italic;
+}
+.hidden{
+    display: none !important;
+    visibility: hidden !important;
+}
+
+a.nav-link:hover{
+    color: #1369db !important;
+    font-weight: bold !important;
+}
+.select2-container .select2-selection--multiple, .select2-container .select2-selection--single{
+    min-height: auto !important;
+}
+.select2-results__option {
+    padding: 5px 8px !important;
+}
+.select2-results__option--highlighted{
+    background: #1369db !important;
+}
+@media (min-width: 1200px) {
+    .modal-xl {
+        max-width: 1140px;
+    }
+
+    /*.main-sidebar {*/
+    /*    width: 270px !important;*/
+    /*}*/
+
+    /*.main-content {*/
+    /*    padding-left: 300px !important;*/
+    /*}*/
+
+    /*.navbar {*/
+    /*    left: 270px !important;*/
+    /*}*/
+    /*.main-footer {*/
+    /*    padding-left: 300px !important;*/
+    /*}*/
+}
+
