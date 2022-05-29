@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -60,7 +60,7 @@ $autoload['packages'] = array();
 */
 $autoload['libraries'] = [
     'form_validation', 'main_lib', 'session',
-    'database','pagination', 'user_agent'
+    'database', 'pagination', 'user_agent'
 ];
 
 /*
@@ -139,4 +139,7 @@ $autoload['model'] = [
     'Main_model' => 'Main_model',
     'User_model' => 'User',
     'Auth_model' => 'Auth',
+    'Topik_model' => 'Topik',
+    'Judul_skripsi_model' => 'Judul_skripsi',
+    'Uji_plagiarisme_model' => 'Uji_plagiarisme'
 ];

@@ -3,28 +3,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $uri1 = $this->uri->segment(1);
 $uri2 = $this->uri->segment(2);
 
-$pembayaran_penjualan_submenu = [
-    'bank', 'keterangan', 'jenis-bayar', 'daftar-bayar', 'uang-masuk',
-	'pembayaran-piutang'
-];
-$pembayaran_penjualan = "";
-if (in_array($uri1, $pembayaran_penjualan_submenu)) {
-    $pembayaran_penjualan = "active ";
-}
-
 ?>
 <div class="main-sidebar sidebar-style-2">
 	<aside id="sidebar-wrapper">
 		<div class="sidebar-brand border-bottom border-primary">
-			<a class="text-primary" href="<?= base_url('dashboard'); ?>">Cosine Similarity</a>
+			<a class="text-primary" href="<?= base_url('dashboard'); ?>">Aplikasi Plagiarisme</a>
 		</div>
 		<div class="sidebar-brand sidebar-brand-sm">
-			<a href="<?= base_url('dashboard'); ?>">CA</a>
+			<a href="<?= base_url('dashboard'); ?>">AP</a>
 		</div>
 		<ul class="sidebar-menu">
 			<li class="<?= $uri1 == '' || $uri1 == 'dashboard' ? 'active' : ''; ?>">
 				<a href="<?= base_url('dashboard'); ?>" class="nav-link">
 					<i class="fas fa-fire"></i><span>Dashboard</span>
+				</a>
+			</li>
+			<li class="dropdown <?= $uri1 == 'topik-skripsi' || $uri1 == 'topik' ? 'active' : ''; ?>">
+				<a href="<?= base_url('topik-skripsi'); ?>" class="nav-link">
+					<i class="fas fa-list-alt"></i><span>Topik Skripsi</span>
 				</a>
 			</li>
 			<?php if(showOnlyTo("1")): ?>
