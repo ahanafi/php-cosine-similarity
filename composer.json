@@ -6,5 +6,7 @@
             "email": "Contaminated007@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.23"
+    }
 }

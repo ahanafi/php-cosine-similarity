@@ -23,18 +23,16 @@ $uri2 = $this->uri->segment(2);
 					<i class="fas fa-list-alt"></i><span>Topik Skripsi</span>
 				</a>
 			</li>
-			<?php if(showOnlyTo("1")): ?>
+            <li class="dropdown <?= $uri1 == 'judul-skripsi' ? 'active' : ''; ?>">
+				<a href="<?= base_url('judul-skripsi'); ?>" class="nav-link">
+					<i class="fas fa-book-open"></i><span>Judul Skripsi</span>
+				</a>
+			</li>
 			<li class="dropdown <?= $uri1 == 'user' ? 'active' : ''; ?>">
 				<a href="<?= base_url('user'); ?>" class="nav-link">
-					<i class="fas fa-user-alt"></i><span>Pengguna</span>
+					<i class="fas fa-users"></i><span>Pengguna</span>
 				</a>
 			</li>
-			<li class="dropdown <?= $uri1 == 'utility' ? 'active' : ''; ?>">
-				<a href="<?= base_url('utility'); ?>" class="nav-link">
-					<i class="fas fa-database"></i><span>Backup &amp; Restore Data</span>
-				</a>
-			</li>
-			<?php endif; ?>
 		</ul>
 		<div class="mt-4 mb-4 p-3 hide-sidebar-mini">
 			<a href="#" onclick="showConfirmLogout()" class="btn btn-danger btn-lg btn-block btn-icon-split">

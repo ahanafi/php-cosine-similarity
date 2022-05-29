@@ -16,7 +16,7 @@ class Auth_model extends User_model {
 			$data = $sql->row();
 			$validate = password_verify($credentials['password'], $data->password);
 
-			if($validate === TRUE) {
+			if($validate) {
 				$this->session->set_userdata("user", $data);
 				$this->session->set_userdata("is_logged_in", TRUE);
 				return true;
@@ -31,7 +31,7 @@ class Auth_model extends User_model {
 	public function register($data)
 	{
 		$register = $this->db->insert($this->table, $data);
-		return ($register) ? TRUE : FALSE;
+		return (bool)$register;
 	}
 	
 

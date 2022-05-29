@@ -1,7 +1,7 @@
 <?php
 function isAuthenticated() {
     $ci =& get_instance();
-    return ($ci->session->is_logged_in === TRUE) ? true : false;
+    return $ci->session->is_logged_in === TRUE;
 }
 
 function getAutoNumber($table, $column, $code) {
@@ -45,11 +45,8 @@ function getUser($index = null) {
 
 function getUserLevel($index = null) {
     $user_level_lists = [
-        'ADMIN_SUPER' => 'Super Admin',
-        'ADMIN_TOKO' => 'Admin Toko',
-        'ADMIN_KEUANGAN' => 'Admin Keuangan',
-        'ADMIN_SUPPLIER' => 'Admin Supplier'
-    ];
+        'ADMIN' => 'Administrator',
+        'KAPRODI' => 'Kaprodi'];
 
     if($index !== null) {
         return $user_level_lists[$index];
@@ -163,4 +160,20 @@ function showBreadCrumb() {
     $html .= "</div>";
 
     return $html;
+}
+
+function getStudyProgram($key = null) {
+    $arrStudyProgram = [
+        'TI' => 'Teknik Informatika',
+        'SI' => 'Sistem Informasi',
+        'DKV' => 'Desain Komunikasi Visual',
+        'MB' => 'Manajemen Bisnis',
+        'KA' => 'Komputerisasi Akuntansi'
+    ];
+
+    if ($key !== null && array_key_exists($key, $arrStudyProgram)) {
+        return $arrStudyProgram[$key];
+    }
+
+    return $arrStudyProgram;
 }
