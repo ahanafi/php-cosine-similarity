@@ -4,10 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-	<title><?php echo $title; ?> &mdash; Codepos App</title>
-
+	
 	<!-- General CSS Files -->
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/fontawesome/css/all.min.css">
@@ -50,9 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					</div>
 				</div>
 			</div>
-			<div class="simple-footer mt-5">
-				Copyright &copy; Codepos App
-			</div>
+		
 		</div>
 	</section>
 </div>

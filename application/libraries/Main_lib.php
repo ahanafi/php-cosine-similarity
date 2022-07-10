@@ -43,6 +43,12 @@ Class Main_lib {
 
 	}
 
+	/**
+	 * Ini untuk memanggil template di halaman Kaprodi
+	 * @param  [type]
+	 * @param  array
+	 * @return [type]
+	 */
 	public function getTemplate($view_file, $data = [])
     {
         $this->ci->load->view('templates/header', $data);
@@ -51,6 +57,21 @@ Class Main_lib {
         $this->ci->load->view($view_file);
         $this->ci->load->view('templates/footer');
         $this->ci->load->view('templates/js');
+    }
+
+    /**
+	 * Ini untuk memanggil template di halaman Mahasiswa
+	 * @param  [type]
+	 * @param  array
+	 * @return [type]
+	 */
+	public function getTemplateMahasiswa($view_file, $data = [])
+    {
+        $this->ci->load->view('cek-plagiarisme/header', $data);
+        $this->ci->load->view('cek-plagiarisme/layout');
+        $this->ci->load->view('cek-plagiarisme/sidebar');
+        $this->ci->load->view($view_file);
+        $this->ci->load->view('cek-plagiarisme/footer');
     }
 
 }

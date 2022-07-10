@@ -39,7 +39,7 @@
                                         <th>Judul Skripsi</th>
                                         <th width="70px">Topik</th>
                                         <th width="60px">Tahun Skripsi</th>
-                                        <th class="text-center">Aksi</th>
+                                        <th width="100px" class="text-center">Aksi</th>
                                     </tr>
                                     </thead>
                                     <tbody>

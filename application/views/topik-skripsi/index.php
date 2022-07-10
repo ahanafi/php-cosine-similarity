@@ -25,9 +25,9 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th width="20%;">Nama Topik Skripsi</th>
-                                        <th style="width: 65%;">Keterangan</th>
-                                        <th class="text-center">Aksi</th>
+                                        <th style="width:30%;">Nama Topik Skripsi</th>
+                                        <th style="width: 40%;">Keterangan</th>
+                                        <th style="width: 20%;" class="text-center">Aksi</th>
                                     </tr>
                                     </thead>
                                     <tbody>

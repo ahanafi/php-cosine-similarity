@@ -34,7 +34,7 @@ class Authentication extends CI_Controller {
 			$this->form_validation->set_error_delimiters("<p class='text-danger'>","</p>");
 
             if ($this->form_validation->run() === FALSE) {
-                $data = ['title' => "Login - Cosine Similarity"];
+                $data = ['title' => "Login"];
                 $this->load->view('auth/form-login', $data);
             } else {
                 $credentials = [
@@ -54,7 +54,7 @@ class Authentication extends CI_Controller {
             }
 
         } else {
-            $data = ['title' => "Login - Cosine Similarity"];
+            $data = ['title' => "Login"];
             $this->load->view('auth/form-login', $data);
         }
 	}

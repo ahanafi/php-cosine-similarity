@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="footer-left">
                     Copyright &copy; <?php echo date("Y-m-d"); ?>
                     <div class="bullet"></div>
-					<a href="<?php echo base_url(); ?>">Codepos App</a>
+					<a href="<?php echo base_url(); ?>"></a>
                 </div>
                 <div class="footer-right">
 

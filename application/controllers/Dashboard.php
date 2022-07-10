@@ -16,20 +16,12 @@ class Dashboard extends CI_Controller {
 	{
 	    provideAccessTo("all");
 
-	    $total_pelanggan = 100;
-	    $total_supplier = 1102;
-	    $total_nota_penjualan = 1102;
-        $total_nota_supplier = 400;
-        $total_retur_penjualan = 1102;
-        $total_retur_supplier = 42;
+	    $total_judul_skripsi = $this->Judul_skripsi->count();
+	    $total_topik_skripsi = $this->Topik->count();
 	    $data = [
             'title' => 'Dashboard',
-            'total_pelanggan' => $total_pelanggan,
-            'total_supplier' => $total_supplier,
-            'total_nota_penjualan' => $total_nota_penjualan,
-            'total_nota_supplier' => $total_nota_supplier,
-            'total_retur_penjualan' => $total_retur_penjualan,
-            'total_retur_supplier' => $total_retur_supplier,
+            'total_judul_skripsi' => $total_judul_skripsi,
+            'total_topik_skripsi' => $total_topik_skripsi,
         ];
 
         $this->main_lib->getTemplate("dashboard/index", $data);

@@ -44,26 +44,3 @@ function toRupiah(nominal) {
     return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
 
 }
-
-const showNotaByPelanggan = (element) => {
-    const id_pelanggan = element.value;
-    if(id_pelanggan !== '' && typeof id_pelanggan !== 'undefined') {
-        const actionURL = `${BASE_URL}/pelanggan/get-daftar-nota/${id_pelanggan}`;
-        $.ajax({
-            method: 'GET',
-            url: actionURL,
-            success: function (response) {
-                const data = JSON.parse(response);
-                if(data !== '') {
-                    // $(".list-nota > option").remove();
-                    // $(".list-nota").append(`<option disabled selected>-- Pilih Nota --</option>`);
-                    // $.each(data, function (index, val) {
-                    //     const newOption = `<option value="${val.no_nota}">${val.no_nota}</option>`;
-                    //     $(".list-nota").append(newOption);
-                    // });
-                    
-                }
-            }
-        });
-    }
-}
