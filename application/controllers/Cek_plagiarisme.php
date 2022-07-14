@@ -21,6 +21,7 @@ class Cek_plagiarisme extends CI_Controller
             'no' => 1
         ];
 
+
         $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/topik', $data);
     }
 

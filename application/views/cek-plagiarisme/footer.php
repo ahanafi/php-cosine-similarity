@@ -27,7 +27,7 @@
 <script src="<?php echo base_url(); ?>assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
 <script>
     //Datatables
-    $("#data-table").dataTable();
+    $("#data-table").dataTable({responsive: true});
 </script>
 </body>
 </html>
