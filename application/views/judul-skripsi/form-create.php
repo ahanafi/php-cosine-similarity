@@ -46,7 +46,7 @@
                                     </label>
                                     <div class="col-sm-6">
                                         <select name="program_studi" id="program_studi" class="form-control">
-                                            <option value="" selected disabled>-- Pilih Program Studi --</option>
+                                            <option value="" selected disabled>Pilih Program Studi</option>
                                             <?php foreach($study_program as $key => $prodi): ?>
                                                 <option <?php echo (set_value('program_studi') === $key) ? "selected" : "" ?> value="<?php echo $key ?>"><?php echo $prodi ?></option>
                                             <?php endforeach; ?>
@@ -62,7 +62,7 @@
                                     </label>
                                     <div class="col-sm-6">
                                         <select name="topik_skripsi_id" id="topik_skripsi" class="form-control">
-                                            <option value="" selected disabled>-- Pilih Topik Skripsi --</option>
+                                            <option value="" selected disabled>Pilih Topik Skripsi</option>
                                             <?php foreach($topik_skripsi as $topik): ?>
                                                 <option <?php echo (set_value('topik_skripsi') === $topik->id_topik_skripsi) ? "selected" : "" ?> value="<?php echo $topik->id_topik_skripsi ?>"><?php echo $topik->nama_topik_skripsi ?></option>
                                             <?php endforeach; ?>

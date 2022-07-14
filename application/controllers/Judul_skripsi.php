@@ -188,23 +188,30 @@ class Judul_skripsi extends CI_Controller
                     $judulSkripsi = $rowData[5];
                     $topikSkripsi = $rowData[6];
 
+                    // print_r($rowData);
+                    // die();
+
                     $checkJudulByNim = $this->Judul_skripsi->findById(['nim' => $nim]);
 
                     // Judul belum ada di database
                     if (!$checkJudulByNim) {
                         $idTopikSkripsi = 1;
 
+                        // Validasi jika kolom topik skripsi tidak kosong (ada isinya)
                         if ($topikSkripsi !== '') {
                             // Cek topik skripsi
                             $cekTopik = $this->Topik->getBy('nama_topik_skripsi', $topikSkripsi);
 
-                            if ($cekTopik) {
+                            if (!is_null($cekTopik)) {
                                 $idTopikSkripsi = $cekTopik->id_topik_skripsi;
                             } else {
-                                $this->Topik->insert([
+                                $dataTopikSkripsi = [
                                     'nama_topik_skripsi' => $topikSkripsi,
                                     'keterangan' => $topikSkripsi
-                                ]);
+                                ];
+
+                                // Input data topik skripsi baru ke database
+                                $this->Topik->insert($dataTopikSkripsi);
 
                                 $idTopikSkripsi = $this->Topik->getLastInsertID();
                             }

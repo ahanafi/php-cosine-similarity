@@ -33,4 +33,3 @@
                 </div>
             </section>
         </div>
-<?php $this->load->view('cek-plagiarisme/footer') ?>
