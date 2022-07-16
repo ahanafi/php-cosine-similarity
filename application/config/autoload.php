@@ -92,7 +92,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'my_helper');
+$autoload['helper'] = array('url', 'my_helper', 'cosine_helper');
 
 /*
 | -------------------------------------------------------------------
@@ -141,5 +141,6 @@ $autoload['model'] = [
     'Auth_model' => 'Auth',
     'Topik_model' => 'Topik',
     'Judul_skripsi_model' => 'Judul_skripsi',
-    'Uji_plagiarisme_model' => 'Uji_plagiarisme'
+    'Uji_plagiarisme_model' => 'Uji_plagiarisme',
+    'TFIDF_model' => 'TFIDF'
 ];
