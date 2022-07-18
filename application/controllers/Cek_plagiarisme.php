@@ -49,6 +49,9 @@ class Cek_plagiarisme extends CI_Controller
             // Hitung TF-IDF langkah 1
             $tfIdf = $this->hitungTfIdf($arrTerms, $arrJudul, $query);
 
+            print_r($tfIdf);
+            die();
+
             // Hitung TF-IDF langkah ke 2
             $tfXidf = $this->hitungTFxIDF($tfIdf, $arrJudul, $query);
 
@@ -84,6 +87,11 @@ class Cek_plagiarisme extends CI_Controller
         $results = [];
         $termIndex = 0;
 
+        $arrDataTfIdf = [];
+
+        // Insert judul yang diajukan ke database
+        $idUjiPlagiarisme = $this->Uji_plagiarisme->insertIfNotExist($query);
+
         foreach ($terms as $term) {
             if (! isStopWords(strtolower($term))) {
                 $results[$termIndex]['term'] = strtolower($term);
@@ -112,9 +120,24 @@ class Cek_plagiarisme extends CI_Controller
 
                 $results[$termIndex]['df'] = $df;
                 $results[$termIndex]['idf'] = $idf;
+
+                // Validasi term di table TF-IDF
+                $checkTerm = $this->TFIDF->checkTerm($term, $idUjiPlagiarisme);
+                if ($checkTerm <= 0) {
+                    $arrDataTfIdf[] = [
+                        'id_uji_plagiarisme' => $idUjiPlagiarisme,
+                        'term' => strtolower($term),
+                        'df' => $df,
+                        'idf' => $idf
+                    ];
+                }
+
                 $termIndex++;
             }
         }
+
+        // Insert ke table tf idf
+        $this->TFIDF->insert($arrDataTfIdf, true);
 
         return $results;
     }

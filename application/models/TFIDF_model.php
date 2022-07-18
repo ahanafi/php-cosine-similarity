@@ -4,6 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class TFIDF_model extends Main_model {
 
 	protected $table = "tf_idf";
+
+	public function checkTerm($term, $idUjiPlagiarisme)
+    {
+        $query = $this->rawQuery("SELECT * FROM $this->table WHERE term = '$term' AND id_uji_plagiarsime = '$idUjiPlagiarisme'");
+        return $query->num_rows();
+    }
 }
 
 /* End of file TFIDF_model.php */

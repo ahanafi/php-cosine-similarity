@@ -36,9 +36,9 @@ class Main_model extends CI_Model
         return $result;
     }
 
-    public function insert($data = [], $bacth = FALSE)
+    public function insert($data = [], $batch = FALSE)
     {
-        if ($bacth == TRUE) {
+        if ($batch) {
             $insert = $this->db->insert_batch($this->table, $data);
         } else {
             $insert = $this->db->insert($this->table, $data);
@@ -131,6 +131,11 @@ class Main_model extends CI_Model
         return $this->db->select_sum($column)
             ->where($keyColumn, $value)
             ->get($this->table)->row();
+    }
+
+    public function rawQuery($query)
+    {
+        return $this->db->query($query);
     }
 
 }
