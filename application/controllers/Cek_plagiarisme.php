@@ -49,9 +49,6 @@ class Cek_plagiarisme extends CI_Controller
             // Hitung TF-IDF langkah 1
             $tfIdf = $this->hitungTfIdf($arrTerms, $arrJudul, $query);
 
-            print_r($tfIdf);
-            die();
-
             // Hitung TF-IDF langkah ke 2
             $tfXidf = $this->hitungTFxIDF($tfIdf, $arrJudul, $query);
 
@@ -61,10 +58,36 @@ class Cek_plagiarisme extends CI_Controller
             // Hitung TF-IDF langkah ke 4 (Q ^ 2)
             $tfIdfPower = $this->hitungTfIdfPower($tfIdfQxD, $arrJudul, $query);
 
+            // Hitung SUM hasil Q x D
+            $sumQxD = $this->hitungSumQxD($tfIdfQxD, $arrJudul, $query);
+
+            // Hitung SUM hasil Q x D operasi power dan sqrt
+            $sumQxDpower = $this->hitungSumQxDpower($tfIdfPower, $arrJudul, $query);
+
+            // Hitung nilai cosine similarity
+            $hitungCosineSimilarity = $this->hitungNilaiCosineSimilarity(
+                $sumQxD,
+                $sumQxDpower,
+                $arrJudul,
+                $query
+            );
+
+            // Hitung Rata-rata nilai similarity
+            $rataRataSimilarity = $this->hitungRataRataSimilarity(
+                $hitungCosineSimilarity,
+                $arrJudul,
+                $query
+            );
+
+            // Update nilai kemiripan
+            $this->Uji_plagiarisme->updateSimilarity($rataRataSimilarity, trim($judul));
+
             $data['result_tfidf'] = $tfIdf;
             $data['result_tfXidf'] = $tfXidf;
             $data['result_tfidfQxD'] = $tfIdfQxD;
             $data['result_tfidfPower'] = $tfIdfPower;
+            $data['nilai_cosine_similarity'] = $hitungCosineSimilarity;
+            $data['rata_rata_similarity'] = $rataRataSimilarity;
 
 //        } else {
 //            $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
@@ -93,7 +116,7 @@ class Cek_plagiarisme extends CI_Controller
         $idUjiPlagiarisme = $this->Uji_plagiarisme->insertIfNotExist($query);
 
         foreach ($terms as $term) {
-            if (! isStopWords(strtolower($term))) {
+            if (!isStopWords(strtolower($term))) {
                 $results[$termIndex]['term'] = strtolower($term);
 
                 $tfIndex = 1;
@@ -136,8 +159,11 @@ class Cek_plagiarisme extends CI_Controller
             }
         }
 
-        // Insert ke table tf idf
-        $this->TFIDF->insert($arrDataTfIdf, true);
+        if (count($arrDataTfIdf) > 0) {
+            // Insert ke table tf idf
+            $this->TFIDF->insert($arrDataTfIdf, true);
+        }
+
 
         return $results;
     }
@@ -219,7 +245,8 @@ class Cek_plagiarisme extends CI_Controller
      * @param string $query
      * @return array
      */
-    private function hitungTfIdfPower(array $arrTfIdf, array $judulSkripsi, string $query): array {
+    private function hitungTfIdfPower(array $arrTfIdf, array $judulSkripsi, string $query): array
+    {
         $results = [];
         $indexTerm = 0;
         foreach ($arrTfIdf as $data) {
@@ -245,6 +272,103 @@ class Cek_plagiarisme extends CI_Controller
         return $results;
     }
 
+    /**
+     * @param array $arrTfIdfQxD
+     * @param array $judulSkripsi
+     * @param string $query
+     * @return array
+     */
+    private function hitungSumQxD(array $arrTfIdfQxD, array $judulSkripsi, string $query): array
+    {
+        $results = [];
+
+        for ($i = 1; $i < count($judulSkripsi); $i++) {
+            if (strtolower($judulSkripsi[$i]) !== strtolower($query)) {
+                $key = 'Q_x_D' . $i;
+                $newKey = 'Q_x_D' . $i . '_sum';
+                $results[$newKey] = array_sum(array_column($arrTfIdfQxD, $key));
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * @param array $arrTfIdfPower
+     * @param array $judulSkripsi
+     * @param string $query
+     * @return array
+     */
+    private function hitungSumQxDpower(array $arrTfIdfPower, array $judulSkripsi, string $query): array
+    {
+        $results = [];
+
+        $qSum = array_sum(array_column($arrTfIdfPower, 'Q_x_idf_pow'));
+
+        $results['Q_sum'] = $qSum;
+        $results['Q_sqrt'] = sqrt($qSum);
+
+        for ($i = 1; $i < count($judulSkripsi); $i++) {
+            if (strtolower($judulSkripsi[$i]) !== strtolower($query)) {
+                $key = 'D' . $i . '_sum';
+                $keySqrt = 'D' . $i . '_sqrt';
+                $dSum = array_sum(array_column($arrTfIdfPower, 'D' . $i . '_x_idf_pow'));
+                $results[$key] = $dSum;
+                $results[$keySqrt] = sqrt($dSum);
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param array $arrSumQxD
+     * @param array $arrSumQxDpower
+     * @param array $judulSkripsi
+     * @param string $query
+     * @return array
+     */
+    private function hitungNilaiCosineSimilarity(array $arrSumQxD, array $arrSumQxDpower, array $judulSkripsi, string $query): array
+    {
+        $results = [];
+
+        for ($i = 1; $i < count($judulSkripsi); $i++) {
+            if (strtolower($judulSkripsi[$i]) !== strtolower($query)) {
+                $keyQxDsum = 'Q_x_D' . $i .'_sum';
+                $keyDsqrt = 'D' . $i . '_sqrt';
+
+                $qSqrt = $arrSumQxDpower['Q_sqrt'];
+                $dSqrt = $arrSumQxDpower[$keyDsqrt];
+
+                $newKeyJudul = 'judul_D'. $i;
+                $newKey = 'cos_Q_D' . $i;
+                $results[$newKeyJudul] = $judulSkripsi[$i];
+                $results[$newKey] = $arrSumQxD[$keyQxDsum] / ( $qSqrt * $dSqrt);
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param array $nilaiCosineSimilarity
+     * @param array $judulSkripsi
+     * @param string $query
+     * @return float|int
+     */
+    private function hitungRataRataSimilarity(array $nilaiCosineSimilarity, array $judulSkripsi, string $query)
+    {
+        $totalNilai = 0;
+        $banyakData = 0;
+        for ($i = 1; $i < count($judulSkripsi); $i++) {
+            if (strtolower($judulSkripsi[$i]) !== strtolower($query)) {
+                $key = 'cos_Q_D' . $i;
+                $totalNilai += $nilaiCosineSimilarity[$key];
+                $banyakData++;
+            }
+        }
+
+        return $totalNilai / $banyakData;
+    }
 
     public function topik_skripsi()
     {

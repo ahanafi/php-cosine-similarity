@@ -23,6 +23,15 @@ class Uji_plagiarisme_model extends Main_model {
         return $this->getLastInsertID();
     }
 
+    public function updateSimilarity($nilai, $judul)
+    {
+        return $this->update([
+            'kemiripan' => $nilai
+        ], [
+            'LOWER(judul)' => strtolower($judul)
+        ]);
+    }
+
 }
 
 /* End of file Uji_plagiarisme_model.php */

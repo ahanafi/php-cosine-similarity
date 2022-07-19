@@ -7,7 +7,8 @@ class TFIDF_model extends Main_model {
 
 	public function checkTerm($term, $idUjiPlagiarisme)
     {
-        $query = $this->rawQuery("SELECT * FROM $this->table WHERE term = '$term' AND id_uji_plagiarsime = '$idUjiPlagiarisme'");
+        $term = strtolower($term);
+        $query = $this->rawQuery("SELECT * FROM $this->table WHERE term = '$term' AND id_uji_plagiarisme = '$idUjiPlagiarisme'");
         return $query->num_rows();
     }
 }

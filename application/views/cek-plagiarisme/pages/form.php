@@ -234,12 +234,12 @@
                     <div class="card-header">
                         <h4><u>E. Tabel Perhitungan TF-IDF (TF/IDF(Q,D))^2</u></h4>
                         <div class="card-header-action">
-                            <a data-collapse="#basic-tfidf-qxd" class="btn btn-icon btn-info" href="#">
+                            <a data-collapse="#basic-tfidf-qxd-power" class="btn btn-icon btn-info" href="#">
                                 <i class="fas fa-minus"></i>
                             </a>
                         </div>
                     </div>
-                    <div id="basic-tfidf-qxd" class="collapse show">
+                    <div id="basic-tfidf-qxd-power" class="collapse show">
                         <div class="card-body">
                             <table class="table table-sm table-bordered w-100">
                                 <thead>
@@ -297,6 +297,56 @@
                     </div>
                 </div>
                 <!-- END TF-IDF Power -->
+
+                <!-- Nilai Cosine Similarity -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4><u>F. Tabel Hasil Nilai Akhir</u></h4>
+                        <div class="card-header-action">
+                            <a data-collapse="#cosine-result" class="btn btn-icon btn-info" href="#">
+                                <i class="fas fa-minus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="cosine-result" class="collapse show">
+                        <div class="card-body">
+                            <table class="table table-sm table-bordered w-100">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">No.</th>
+                                    <th class="text-center">Notasi</th>
+                                    <th class="text-center">Judul Skripsi</th>
+                                    <th class="text-center">Nilai Similarity</th>
+                                    <th class="text-center">Nilai Similarity (%)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
+                                    <tr>
+                                        <td class="text-center"><?php echo $i ?></td>
+                                        <td class="text-center"><?php echo 'D' . $i ?></td>
+                                        <td><?php echo $nilai_cosine_similarity['judul_D' . $i] ?></td>
+                                        <td class="text-center">
+                                            <?php echo number_format($nilai_cosine_similarity['cos_Q_D' . $i], 4) ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php echo number_format(($nilai_cosine_similarity['cos_Q_D' . $i] * 100), 2) ?>
+                                        </td>
+                                    </tr>
+                                <?php endfor; ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th colspan="3">RATA-RATA NILAI SIMILARITY Q</th>
+                                    <th class="text-center"><?php echo number_format($rata_rata_similarity, 4) ?></th>
+                                    <th class="text-center"><?php echo number_format(($rata_rata_similarity * 100), 2) ?></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Nilai Cosine Similarity -->
             <?php endif; ?>
         </div>
     </section>
