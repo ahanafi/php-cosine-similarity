@@ -15,6 +15,20 @@ class Judul_skripsi_model extends Main_model {
 
         return $query->result();
     }
+
+    public function cekJudulSkripsi($judul)
+    {
+        $judulLowerCase = strtolower($judul); // konversi ke lower case
+        $query = $this->rawQuery("SELECT * FROM $this->table WHERE LOWER(`judul`) = '$judulLowerCase'");
+        return $query->num_rows();
+    }
+
+    public function getDataByJudul($judul)
+    {
+        $judulLowerCase = strtolower($judul); // konversi ke lower case
+        $query = $this->rawQuery("SELECT * FROM $this->table WHERE LOWER(`judul`) = '$judulLowerCase'");
+        return $query->row();
+    }
 }
 
 /* End of file Judul_skripsi_model.php */

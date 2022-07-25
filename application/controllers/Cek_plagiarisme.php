@@ -18,82 +18,105 @@ class Cek_plagiarisme extends CI_Controller
 
             $judulSkripsiDb = $this->Judul_skripsi->all();
 
-            // Data judul skripsi yang sudah ada pada database
-            $data['judul_existing'] = $judulSkripsiDb;
+            // Validasi judul skripsi yang sama persis (mirip 100%)
+            $cekJudul = $this->Judul_skripsi->cekJudulSkripsi($judul);
 
-            // array judul => Judul skripsi dari DB + judul yang diinput via form
-            $arrJudul = [];
-            $arrJudul[] = $judul;
+            // Jika judul ada di database
+            if ($cekJudul > 0 ) {
+                $data['similarity'] = 100;
+                $data['judul_db'] = $this->Judul_skripsi->getDataByJudul($judul);
 
-            foreach ($judulSkripsiDb as $jd) {
-                $arrJudul[] = $jd->judul;
-            }
+                $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
+                 // stop proses (lewati proses perhitungan selanjutnya)
+            } else {
 
-            // array terms
-            $arrTerms = [];
+                // Data judul skripsi yang sudah ada pada database
+                $data['judul_existing'] = $judulSkripsiDb;
 
-            foreach ($arrJudul as $jd) {
-                $tokenize = tokenize($jd);
-                foreach ($tokenize as $word) {
-                    if (trim($word) !== '') {
+                // array judul => Judul skripsi dari DB + judul yang diinput via form
+                $arrJudul = [];
+                $arrJudul[] = $judul;
 
-                        // Memasukkan `term` ke variable array dengan stop-list
-                        $arrTerms[] = cleanStopLists($word);
+                foreach ($judulSkripsiDb as $jd) {
+                    $arrJudul[] = $jd->judul;
+                }
+
+                // array terms
+                $arrTerms = [];
+
+                foreach ($arrJudul as $jd) {
+                    $tokenize = tokenize($jd);
+                    foreach ($tokenize as $word) {
+                        $word = cleanStopLists($word);
+                        if (trim($word) !== '') {
+
+                            // Memasukkan `term` ke variable array dengan stop-list
+                            $arrTerms[] = $word;
+                        }
                     }
                 }
+
+                // Filter unique array
+                $arrTerms = array_keys(array_flip($arrTerms));
+
+                // Hitung TF-IDF langkah 1
+                $tfIdf = $this->hitungTfIdf($arrTerms, $arrJudul, $query);
+
+                // Hitung TF-IDF langkah ke 2
+                $tfXidf = $this->hitungTFxIDF($tfIdf, $arrJudul, $query);
+
+                // Hitung TF-IDF langkah ke 3 (Q x D)
+                $tfIdfQxD = $this->hitungTfIdfQxD($tfXidf, $arrJudul, $query);
+
+                // Hitung TF-IDF langkah ke 4 (Q ^ 2)
+                $tfIdfPower = $this->hitungTfIdfPower($tfIdfQxD, $arrJudul, $query);
+
+                // Hitung SUM hasil Q x D
+                $sumQxD = $this->hitungSumQxD($tfIdfQxD, $arrJudul, $query);
+
+                // Hitung SUM hasil Q x D operasi power dan sqrt
+                $sumQxDpower = $this->hitungSumQxDpower($tfIdfPower, $arrJudul, $query);
+
+                // Hitung nilai cosine similarity
+                $hitungCosineSimilarity = $this->hitungNilaiCosineSimilarity(
+                    $sumQxD,
+                    $sumQxDpower,
+                    $arrJudul,
+                    $query
+                );
+
+                // Hitung Rata-rata nilai similarity (Semua dihitung)
+                // $rataRataSimilarity = $this->hitungRataRataSimilarity(
+                //     $hitungCosineSimilarity,
+                //     $arrJudul,
+                //     $query
+                // );
+                // 
+                
+                // Hitung rata-rata di atas 60 persen
+                $rataRataSimilarity = $this->hitungRataRataSimilarityAbove60persen(
+                    $hitungCosineSimilarity,
+                    $arrJudul,
+                    $query
+                );
+
+                // Update nilai kemiripan
+                $this->Uji_plagiarisme->updateSimilarity($rataRataSimilarity, trim($judul));
+
+                $data['result_tfidf'] = $tfIdf;
+                $data['result_tfXidf'] = $tfXidf;
+                $data['result_tfidfQxD'] = $tfIdfQxD;
+                $data['result_tfidfPower'] = $tfIdfPower;
+                $data['nilai_cosine_similarity'] = $hitungCosineSimilarity;
+                $data['rata_rata_similarity'] = $rataRataSimilarity;
+
+                $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
             }
 
-            // Filter unique array
-            $arrTerms = array_keys(array_flip($arrTerms));
-
-            // Hitung TF-IDF langkah 1
-            $tfIdf = $this->hitungTfIdf($arrTerms, $arrJudul, $query);
-
-            // Hitung TF-IDF langkah ke 2
-            $tfXidf = $this->hitungTFxIDF($tfIdf, $arrJudul, $query);
-
-            // Hitung TF-IDF langkah ke 3 (Q x D)
-            $tfIdfQxD = $this->hitungTfIdfQxD($tfXidf, $arrJudul, $query);
-
-            // Hitung TF-IDF langkah ke 4 (Q ^ 2)
-            $tfIdfPower = $this->hitungTfIdfPower($tfIdfQxD, $arrJudul, $query);
-
-            // Hitung SUM hasil Q x D
-            $sumQxD = $this->hitungSumQxD($tfIdfQxD, $arrJudul, $query);
-
-            // Hitung SUM hasil Q x D operasi power dan sqrt
-            $sumQxDpower = $this->hitungSumQxDpower($tfIdfPower, $arrJudul, $query);
-
-            // Hitung nilai cosine similarity
-            $hitungCosineSimilarity = $this->hitungNilaiCosineSimilarity(
-                $sumQxD,
-                $sumQxDpower,
-                $arrJudul,
-                $query
-            );
-
-            // Hitung Rata-rata nilai similarity
-            $rataRataSimilarity = $this->hitungRataRataSimilarity(
-                $hitungCosineSimilarity,
-                $arrJudul,
-                $query
-            );
-
-            // Update nilai kemiripan
-            $this->Uji_plagiarisme->updateSimilarity($rataRataSimilarity, trim($judul));
-
-            $data['result_tfidf'] = $tfIdf;
-            $data['result_tfXidf'] = $tfXidf;
-            $data['result_tfidfQxD'] = $tfIdfQxD;
-            $data['result_tfidfPower'] = $tfIdfPower;
-            $data['nilai_cosine_similarity'] = $hitungCosineSimilarity;
-            $data['rata_rata_similarity'] = $rataRataSimilarity;
-
-//        } else {
-//            $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
+        } else {
+            $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
         }
 
-        $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
 
     }
 
@@ -123,20 +146,23 @@ class Cek_plagiarisme extends CI_Controller
                 $df = 0;
                 foreach ($judulSkripsi as $judul) {
 
-                    if (strtolower($judul) === strtolower($query)) {
+                    if (strtolower($judul) === strtolower($query) && $tfIndex === 1) {
                         $key = "Q";
                     } else {
                         $key = "D" . $tfIndex;
                         $tfIndex++;
                     }
 
-                    $cleanedJudul = cleanLetterFromStopList($judul);
-                    $tf = substr_count($cleanedJudul, $term);
-                    if ($tf > 0) {
-                        $df++;
+                    if ($term !== '') {
+                        $cleanedJudul = cleanLetterFromStopList($judul);
+                        $tf = substr_count($cleanedJudul, $term); // SDADLSKL  
+                        if ($tf > 0) {
+                            $df++;
+                        }
+
+                        $results[$termIndex][$key] = $tf;
                     }
 
-                    $results[$termIndex][$key] = $tf;
                 }
 
                 $idf = log(count($judulSkripsi) / $df, 10) + 1;
@@ -144,16 +170,21 @@ class Cek_plagiarisme extends CI_Controller
                 $results[$termIndex]['df'] = $df;
                 $results[$termIndex]['idf'] = $idf;
 
-                // Validasi term di table TF-IDF
-                $checkTerm = $this->TFIDF->checkTerm($term, $idUjiPlagiarisme);
-                if ($checkTerm <= 0) {
-                    $arrDataTfIdf[] = [
-                        'id_uji_plagiarisme' => $idUjiPlagiarisme,
-                        'term' => strtolower($term),
-                        'df' => $df,
-                        'idf' => $idf
-                    ];
-                }
+                // Validasi term ga kosong
+                // if ($term !== '') {
+                    // Validasi term di table TF-IDF
+                    $checkTerm = $this->TFIDF->checkTerm($term, $idUjiPlagiarisme);
+                    if ($checkTerm <= 0) {
+                        $arrDataTfIdf[] = [
+                            'id_uji_plagiarisme' => $idUjiPlagiarisme,
+                            'term' => strtolower($term),
+                            'df' => $df,
+                            'idf' => $idf
+                        ];
+                    }
+
+                //}
+
 
                 $termIndex++;
             }
@@ -187,7 +218,7 @@ class Cek_plagiarisme extends CI_Controller
             $key = '';
 
             foreach ($judulSkripsi as $judul) {
-                if (strtolower($judul) === strtolower($query)) {
+                if (strtolower($judul) === strtolower($query) && $tfIndex === 1) {
                     $key = "Q";
                 } else {
                     $key = "D" . $tfIndex;
@@ -254,7 +285,7 @@ class Cek_plagiarisme extends CI_Controller
 
             $tfIndex = 1;
             foreach ($judulSkripsi as $judul) {
-                if (strtolower($judul) === strtolower($query)) {
+                if (strtolower($judul) === strtolower($query) && $tfIndex === 1) {
                     $key = "Q_x_idf";
                 } else {
                     $key = "D" . $tfIndex . "_x_idf";
@@ -368,6 +399,35 @@ class Cek_plagiarisme extends CI_Controller
         }
 
         return $totalNilai / $banyakData;
+    }
+
+
+    /**
+     * [hitungRataRataSimilarityAbove60persen description]
+     * @param  array  $nilaiCosineSimilarity [description]
+     * @param  array  $judulSkripsi          [description]
+     * @param  string $query                 [description]
+     * @return [type]                        [description]
+     */
+    private function hitungRataRataSimilarityAbove60persen(array $nilaiCosineSimilarity, array $judulSkripsi, string $query)
+    {
+        $totalNilai = 0;
+        $banyakData = 0;
+        for ($i = 1; $i < count($judulSkripsi); $i++) {
+            if (strtolower($judulSkripsi[$i]) !== strtolower($query)) {
+                $key = 'cos_Q_D' . $i;
+
+                $nilaiCosine = $nilaiCosineSimilarity[$key];
+                $nilaiCosineSimilarityPersen = number_format($nilaiCosine * 100, 0);
+
+                if ($nilaiCosineSimilarityPersen > 60) {
+                    $totalNilai += $nilaiCosineSimilarity[$key];
+                    $banyakData++;
+                }
+            }
+        }
+
+        return ($banyakData > 0) ? $totalNilai / $banyakData : $banyakData;
     }
 
     public function topik_skripsi()

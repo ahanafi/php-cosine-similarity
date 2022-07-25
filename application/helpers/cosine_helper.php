@@ -7,7 +7,7 @@
 function tokenize(string $letter): array
 {
     $pemisah = " ";
-    return explode($pemisah, $letter);
+    return explode($pemisah, trim($letter));
 }
 
 /**
