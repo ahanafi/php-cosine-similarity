@@ -20,12 +20,17 @@ $uri2 = $this->uri->segment(2);
 			</li>
 			<li class="dropdown <?= $uri1 == 'topik-skripsi' || $uri1 == 'topik' ? 'active' : ''; ?>">
 				<a href="<?= base_url('topik-skripsi'); ?>" class="nav-link">
-					<i class="fas fa-list-alt"></i><span>Topik Skripsi</span>
+					<i class="fas fa-list-alt"></i><span>Kelola Topik Skripsi</span>
 				</a>
 			</li>
             <li class="dropdown <?= $uri1 == 'judul-skripsi' ? 'active' : ''; ?>">
 				<a href="<?= base_url('judul-skripsi'); ?>" class="nav-link">
-					<i class="fas fa-book-open"></i><span>Judul Skripsi</span>
+					<i class="fas fa-book-open"></i><span>Kelola Judul Skripsi</span>
+				</a>
+			</li>
+            <li class="dropdown <?= $uri1 == 'cek-plagiarisme' && ($uri2 === 'hasil' || $uri2 === 'detail') ? 'active' : ''; ?>">
+				<a href="<?= base_url('cek-plagiarisme/hasil'); ?>" class="nav-link">
+					<i class="fas fa-check-double"></i><span>Hasil Cek Plagiarisme</span>
 				</a>
 			</li>
 			<li class="dropdown <?= $uri1 == 'user' ? 'active' : ''; ?>">

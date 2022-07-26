@@ -3,6 +3,107 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Cek_plagiarisme extends CI_Controller
 {
+    public function hasil()
+    {
+        $data = [
+            'title' => 'Data Hasil Cek Plagiarisme Judul skripsi',
+            'hasil_uji' => $this->Uji_plagiarisme->all(),
+            'no' => 1
+        ];
+        $this->main_lib->getTemplate('hasil/index', $data);
+    }
+
+    public function detail($idUjiPlagiarisme)
+    {
+
+        $judul = $this->Uji_plagiarisme->getBy('id_uji_plagiarisme', $idUjiPlagiarisme);
+        $terms = $this->TFIDF->getTermsByIdUjiPlagiarisme($idUjiPlagiarisme);
+
+        $query = $judul->judul;
+
+        $judulSkripsiDb = $this->Judul_skripsi->all();
+
+        // array judul => Judul skripsi dari DB + judul yang diinput via form
+        $arrJudul = [];
+        $arrJudul[] = $judul->judul;
+
+        foreach ($judulSkripsiDb as $jd) {
+            $arrJudul[] = $jd->judul;
+        }
+
+        // array terms
+        $arrTerms = [];
+
+        foreach ($arrJudul as $jd) {
+            $tokenize = tokenize($jd);
+            foreach ($tokenize as $word) {
+                $word = cleanStopLists($word);
+                if (trim($word) !== '') {
+
+                    // Memasukkan `term` ke variable array dengan stop-list
+                    $arrTerms[] = $word;
+                }
+            }
+        }
+
+        // Filter unique array
+        $arrTerms = array_keys(array_flip($arrTerms));
+
+        // Hitung TF-IDF langkah 1
+        $tfIdf = $this->hitungTfIdf($arrTerms, $arrJudul, $query);
+
+        // Hitung TF-IDF langkah ke 2
+        $tfXidf = $this->hitungTFxIDF($tfIdf, $arrJudul, $query);
+
+        // Hitung TF-IDF langkah ke 3 (Q x D)
+        $tfIdfQxD = $this->hitungTfIdfQxD($tfXidf, $arrJudul, $query);
+
+        // Hitung TF-IDF langkah ke 4 (Q ^ 2)
+        $tfIdfPower = $this->hitungTfIdfPower($tfIdfQxD, $arrJudul, $query);
+
+        // Hitung SUM hasil Q x D
+        $sumQxD = $this->hitungSumQxD($tfIdfQxD, $arrJudul, $query);
+
+        // Hitung SUM hasil Q x D operasi power dan sqrt
+        $sumQxDpower = $this->hitungSumQxDpower($tfIdfPower, $arrJudul, $query);
+
+        // Hitung nilai cosine similarity
+        $hitungCosineSimilarity = $this->hitungNilaiCosineSimilarity(
+            $sumQxD,
+            $sumQxDpower,
+            $arrJudul,
+            $query
+        );
+
+        // Hitung rata-rata di atas 60 persen
+        $rataRataSimilarity = $this->hitungRataRataSimilarityAbove60persen(
+            $hitungCosineSimilarity,
+            $arrJudul,
+            $query
+        );
+
+        $data = [
+            'title' => 'Data Hasil Cek Plagiarisme Judul skripsi',
+            'judul' => $judul,
+            'judul_existing' => $judulSkripsiDb,
+            'terms' => $terms,
+            'no' => 1,
+
+            // Hasil
+            'result_tfidf' => $tfIdf,
+            'result_tfXidf' => $tfXidf,
+            'result_tfidfQxD' => $tfIdfQxD,
+            'result_tfidfPower' => $tfIdfPower,
+            'nilai_cosine_similarity' => $hitungCosineSimilarity,
+            'rata_rata_similarity' => $rataRataSimilarity,
+        ];
+
+        $this->main_lib->getTemplate('hasil/detail', $data);
+    }
+
+    /**
+     * HALAMAN MAHASISWA
+    */
 
     public function index()
     {
@@ -404,12 +505,12 @@ class Cek_plagiarisme extends CI_Controller
 
     /**
      * [hitungRataRataSimilarityAbove60persen description]
-     * @param  array  $nilaiCosineSimilarity [description]
-     * @param  array  $judulSkripsi          [description]
-     * @param  string $query                 [description]
-     * @return [type]                        [description]
+     * @param array $nilaiCosineSimilarity [description]
+     * @param array $judulSkripsi [description]
+     * @param string $query [description]
+     * @return int [type]                        [description]
      */
-    private function hitungRataRataSimilarityAbove60persen(array $nilaiCosineSimilarity, array $judulSkripsi, string $query)
+    private function hitungRataRataSimilarityAbove60persen(array $nilaiCosineSimilarity, array $judulSkripsi, string $query) : int
     {
         $totalNilai = 0;
         $banyakData = 0;
@@ -420,13 +521,14 @@ class Cek_plagiarisme extends CI_Controller
                 $nilaiCosine = $nilaiCosineSimilarity[$key];
                 $nilaiCosineSimilarityPersen = number_format($nilaiCosine * 100, 0);
 
-                if ($nilaiCosineSimilarityPersen > 60) {
+                if ($nilaiCosineSimilarityPersen >= 60) {
                     $totalNilai += $nilaiCosineSimilarity[$key];
                     $banyakData++;
                 }
             }
         }
 
+        $totalNilai = number_format($totalNilai * 100, 0);
         return ($banyakData > 0) ? $totalNilai / $banyakData : $banyakData;
     }
 

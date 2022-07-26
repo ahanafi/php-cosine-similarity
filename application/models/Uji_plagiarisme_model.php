@@ -25,8 +25,10 @@ class Uji_plagiarisme_model extends Main_model {
 
     public function updateSimilarity($nilai, $judul)
     {
+        $status = getStatusKemiripan($nilai);
         return $this->update([
-            'kemiripan' => $nilai
+            'kemiripan' => $nilai,
+            'status' => $status,
         ], [
             'LOWER(judul)' => strtolower($judul)
         ]);

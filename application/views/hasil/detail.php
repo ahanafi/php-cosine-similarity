@@ -1,46 +1,57 @@
-<style>
-    .table thead tr th, tbody tr td {
-
-    }
-</style>
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
+        <div class="section-header">
+            <h1>Data Hasil Cek Plagiarisme</h1>
+            <?php echo showBreadCrumb(); ?>
+        </div>
+
         <div class="section-body">
-            <h2 class="section-title">Halaman Cek Judul Skripsi</h2>
-            <p class="section-lead">
-                Silahkan masukkan judul skripsi yang ingin Anda ajukan sebagai penelitian.
-            </p>
-            <!-- FORM -->
-            <div class="card">
-                <div class="card-header">
-                    <h4>Form Cek Judul Skripsi</h4>
-                </div>
-                <div class="card-body pt-0">
-                    <form action="<?php echo base_url('cek-plagiarisme') ?>" method="POST">
-                        <div class="form-group">
-                            <div class="input-group input-group-lg mb-3">
-                                <input type="text" class="form-control form-control-lg" required
-                                       id="input-title"
-                                       value="<?php echo (isset($judul) && $judul !== '') ? $judul : '' ?>"
-                                       name="judul" autofocus autocomplete="off"
-                                       placeholder="Ketik judul skripsi disini..." aria-label="Input title">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit" name="check">
-                                        <span class="mr-2">Cek Judul</span>
-                                        <i class="fa fa-arrow-right"></i>
-                                    </button>
-                                </div>
+            <h2 class="section-title">
+                Daftar Hasil Cek Plagiarisme Judul Skripsi
+            </h2>
+            <p class="section-lead">Daftar data Judul Skripsi</p>
+
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <!-- DETAIL DATA UJI PLAGIARISME -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-md table-bordered" id="data-table">
+                                    <tbody>
+                                    <tr>
+                                        <td width="200pxpx">ID Uji Plagiarisme</td>
+                                        <td>:</td>
+                                        <td><?php echo $judul->id_uji_plagiarisme; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Judul Skripsi</td>
+                                        <td>:</td>
+                                        <td><?php echo $judul->judul; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="200pxpx">Tingkat Kemiripan (%)</td>
+                                        <td>:</td>
+                                        <td><?php echo $judul->kemiripan; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="200px0px">Status</td>
+                                        <td>:</td>
+                                        <td><?php echo $judul->status; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="200px">Tanggal Pengecekan</td>
+                                        <td>:</td>
+                                        <td><?php echo $judul->tanggal; ?></td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-            <!-- END FORM -->
-
-            <?php if (isset($judul) && $judul !== ''): ?>
-
-                <?php if(!isset($similarity) || $similarity !== 100): ?>
+                    </div>
+                    <!-- END DETAIL -->
 
                     <!-- SAMPLE QUERY -->
                     <div class="card">
@@ -65,7 +76,7 @@
                                     <tr>
                                         <td class="text-center font-weight-bold">Q</td>
                                         <td>
-                                            <?php echo $judul; ?>
+                                            <?php echo $judul->judul; ?>
                                         </td>
                                     </tr>
                                     <?php
@@ -115,7 +126,7 @@
                                     <tr>
                                         <th class="text-center">Q</th>
                                         <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
-                                        <th class="text-center">D<?php echo $i ?></th>
+                                            <th class="text-center">D<?php echo $i ?></th>
                                         <?php endfor; ?>
                                         <th class="text-center">Log(n/df) + 1</th>
                                     </tr>
@@ -123,20 +134,20 @@
                                     <tbody>
                                     <?php
                                     $index = 1;
-                                        foreach ($result_tfidf as $result): ?>
-                                            <tr>
-                                                <td class="text-center"><?php echo $index ?></td>
-                                                <td><?php echo $result['term'] ?></td>
-                                                <td class="text-center"><?php echo $result['Q'] ?></td>
-                                                <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
-                                                    <td class="text-center"><?php echo $result['D'.$i]?></td>
-                                                <?php endfor; ?>
-                                                <td class="text-center"><?php echo $result['df'] ?></td>
-                                                <td class="text-center"><?php echo number_format($result['idf'], 8) ?></td>
-                                            </tr>
-                                            <?php
-                                            $index++;
-                                        endforeach ?>
+                                    foreach ($result_tfidf as $result): ?>
+                                        <tr>
+                                            <td class="text-center"><?php echo $index ?></td>
+                                            <td><?php echo $result['term'] ?></td>
+                                            <td class="text-center"><?php echo $result['Q'] ?></td>
+                                            <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
+                                                <td class="text-center"><?php echo $result['D'.$i]?></td>
+                                            <?php endfor; ?>
+                                            <td class="text-center"><?php echo $result['df'] ?></td>
+                                            <td class="text-center"><?php echo number_format($result['idf'], 8) ?></td>
+                                        </tr>
+                                        <?php
+                                        $index++;
+                                    endforeach ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -163,25 +174,25 @@
                                         <th class="text-center">Term</th>
                                         <th class="text-center">Q</th>
                                         <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
-                                        <th class="text-center">D<?php echo $i ?></th>
+                                            <th class="text-center">D<?php echo $i ?></th>
                                         <?php endfor; ?>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
                                     $index = 1;
-                                        foreach ($result_tfXidf as $result): ?>
-                                            <tr>
-                                                <td class="text-center"><?php echo $index ?></td>
-                                                <td><?php echo $result['term'] ?></td>
-                                                <td class="text-center"><?php echo $result['Q_x_idf'] ?></td>
-                                                <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
-                                                    <td class="text-center"><?php echo $result['D'.$i.'_x_idf']?></td>
-                                                <?php endfor; ?>
-                                            </tr>
-                                            <?php
-                                            $index++;
-                                        endforeach ?>
+                                    foreach ($result_tfXidf as $result): ?>
+                                        <tr>
+                                            <td class="text-center"><?php echo $index ?></td>
+                                            <td><?php echo $result['term'] ?></td>
+                                            <td class="text-center"><?php echo $result['Q_x_idf'] ?></td>
+                                            <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
+                                                <td class="text-center"><?php echo $result['D'.$i.'_x_idf']?></td>
+                                            <?php endfor; ?>
+                                        </tr>
+                                        <?php
+                                        $index++;
+                                    endforeach ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -207,24 +218,24 @@
                                         <th class="text-center">No.</th>
                                         <th class="text-center">Term</th>
                                         <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
-                                        <th class="text-center">D<?php echo $i ?></th>
+                                            <th class="text-center">D<?php echo $i ?></th>
                                         <?php endfor; ?>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
                                     $index = 1;
-                                        foreach ($result_tfidfQxD as $result): ?>
-                                            <tr>
-                                                <td class="text-center"><?php echo $index ?></td>
-                                                <td><?php echo $result['term'] ?></td>
-                                                <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
-                                                    <td class="text-center"><?php echo $result['Q_x_D'.$i]?></td>
-                                                <?php endfor; ?>
-                                            </tr>
-                                            <?php
-                                            $index++;
-                                        endforeach ?>
+                                    foreach ($result_tfidfQxD as $result): ?>
+                                        <tr>
+                                            <td class="text-center"><?php echo $index ?></td>
+                                            <td><?php echo $result['term'] ?></td>
+                                            <?php for($i = 1; $i <= count($judul_existing); $i++): ?>
+                                                <td class="text-center"><?php echo $result['Q_x_D'.$i]?></td>
+                                            <?php endfor; ?>
+                                        </tr>
+                                        <?php
+                                        $index++;
+                                    endforeach ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -325,10 +336,10 @@
                                     </thead>
                                     <tbody>
                                     <?php
-                                        for($i = 1; $i <= count($judul_existing); $i++):
-                                            $nilaiCosinepersen = number_format(($nilai_cosine_similarity['cos_Q_D' . $i] * 100), 0);
-                                            if ($nilaiCosinepersen > 60):
-                                    ?>
+                                    for($i = 1; $i <= count($judul_existing); $i++):
+                                        $nilaiCosinepersen = number_format(($nilai_cosine_similarity['cos_Q_D' . $i] * 100), 0);
+                                        if ($nilaiCosinepersen > 60):
+                                            ?>
                                             <tr>
                                                 <td class="text-center"><?php echo $i ?></td>
                                                 <td class="text-center"><?php echo 'D' . $i ?></td>
@@ -355,8 +366,9 @@
                         </div>
                     </div>
                     <!-- END Nilai Cosine Similarity -->
-                <?php endif; ?>
-            <?php endif; ?>
+                </div>
+            </div>
         </div>
     </section>
 </div>
+<!-- Modal -->

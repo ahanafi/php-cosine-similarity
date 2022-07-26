@@ -11,6 +11,11 @@ class TFIDF_model extends Main_model {
         $query = $this->rawQuery("SELECT * FROM $this->table WHERE term = '$term' AND id_uji_plagiarisme = '$idUjiPlagiarisme'");
         return $query->num_rows();
     }
+
+    public function getTermsByIdUjiPlagiarisme($idUjiPlagiarisme)
+    {
+        return $this->getBy('id_uji_plagiarisme', $idUjiPlagiarisme, true);
+    }
 }
 
 /* End of file TFIDF_model.php */

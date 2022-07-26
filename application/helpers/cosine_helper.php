@@ -120,3 +120,22 @@ function isStopWords(string $term): string
 
     return in_array($term, $arrConjunctions);
 }
+
+function getStatusKemiripan($tingkatKemiripan) : string {
+    if ($tingkatKemiripan <= 0) {
+        return 'TIDAK';
+    }
+
+    if ($tingkatKemiripan > 0 && $tingkatKemiripan <= 30) {
+        return 'RENDAH';
+    }
+
+    if ($tingkatKemiripan > 30 && $tingkatKemiripan <= 60) {
+        return 'SEDANG';
+    }
+
+    if ($tingkatKemiripan > 60) {
+        return 'TINGGI';
+    }
+
+}
