@@ -42,7 +42,7 @@
 
                 <?php if(!isset($similarity) || $similarity !== 100): ?>
 
-                    <!-- SAMPLE QUERY -->
+                    <!-- SAMPLE QUERY ->
                     <div class="card">
                         <div class="card-header">
                             <h4><u>A. Tabel Sample Query</u></h4>
@@ -89,9 +89,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END SAMPLE QUERY -->
+                    <-- END SAMPLE QUERY -->
 
-                    <!-- TF - IDF -->
+                    <!-- TF - IDF ->
                     <div class="card">
                         <div class="card-header">
                             <h4><u>B. Tabel Perhitungan TF &amp; IDF</u></h4>
@@ -142,9 +142,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END TF - IDF -->
+                    <-- END TF - IDF -->
 
-                    <!-- TF x IDF -->
+                    <!-- TF x IDF ->
                     <div class="card">
                         <div class="card-header">
                             <h4><u>C. Tabel Perhitungan TF x IDF</u></h4>
@@ -187,9 +187,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END TF x IDF -->
+                    <-- END TF x IDF -->
 
-                    <!-- TF-IDF QxD -->
+                    <!-- TF-IDF QxD ->
                     <div class="card">
                         <div class="card-header">
                             <h4><u>D. Tabel Perhitungan TF-IDF QxD</u></h4>
@@ -230,9 +230,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END TF-IDF QxD -->
+                    <-- END TF-IDF QxD -->
 
-                    <!-- TF-IDF Power -->
+                    <!-- TF-IDF Power ->
                     <div class="card">
                         <div class="card-header">
                             <h4><u>E. Tabel Perhitungan TF-IDF (TF/IDF(Q,D))^2</u></h4>
@@ -299,12 +299,12 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END TF-IDF Power -->
+                    <-- END TF-IDF Power -->
 
                     <!-- Nilai Cosine Similarity -->
                     <div class="card">
                         <div class="card-header">
-                            <h4><u>F. Tabel Hasil Nilai Akhir</u></h4>
+                            <h4><u>Hasil Pengecekan</u></h4>
                             <div class="card-header-action">
                                 <a data-collapse="#cosine-result" class="btn btn-icon btn-info" href="#">
                                     <i class="fas fa-minus"></i>
@@ -318,19 +318,20 @@
                                     <tr>
                                         <th class="text-center">No.</th>
                                         <th class="text-center">Notasi</th>
-                                        <th class="text-center">Judul Skripsi</th>
+                                        <th class="text-center">Judul Skripsi yang mirip</th>
                                         <th class="text-center">Nilai Similarity</th>
                                         <th class="text-center">Nilai Similarity (%)</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
+                                        $nomor = 1;
                                         for($i = 1; $i <= count($judul_existing); $i++):
                                             $nilaiCosinepersen = number_format(($nilai_cosine_similarity['cos_Q_D' . $i] * 100), 0);
                                             if ($nilaiCosinepersen > 60):
                                     ?>
                                             <tr>
-                                                <td class="text-center"><?php echo $i ?></td>
+                                                <td class="text-center"><?php echo $nomor ?></td>
                                                 <td class="text-center"><?php echo 'D' . $i ?></td>
                                                 <td><?php echo $nilai_cosine_similarity['judul_D' . $i] ?></td>
                                                 <td class="text-center">
@@ -340,16 +341,36 @@
                                                     <?php echo $nilaiCosinepersen; ?>
                                                 </td>
                                             </tr>
-                                        <?php endif; ?>
+                                        <?php
+                                            $nomor++;
+                                            endif; ?>
                                     <?php endfor; ?>
+                                        <td class="font-weight-bold" colspan="3">RATA-RATA KEMIRIPAN </td>
+                                        <td class="font-weight-bold text-center"><?php echo number_format($rata_rata_similarity / 100, 2) ?></td>
+                                        <td class="font-weight-bold text-center"><?php echo $rata_rata_similarity ?></td>
                                     </tbody>
-                                    <tfoot>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
                                     <tr>
-                                        <th colspan="3">RATA-RATA NILAI SIMILARITY Q</th>
-                                        <th class="text-center"><?php echo number_format($rata_rata_similarity / 100, 2) ?></th>
-                                        <th class="text-center"><?php echo $rata_rata_similarity ?></th>
+                                        <th>Level Kemiripan</th>
+                                        <th>Keterangan</th>
                                     </tr>
-                                    </tfoot>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Level 1</td>
+                                        <td> >= 60 % : Judul Skripsi ditolak. Silahkan input judul skripsi kembali.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Level 2</td>
+                                        <td> 40,1 - 59,9% : Judul Skripsi dapat diterima dengan revisi.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Level 3</td>
+                                        <td> <= 60 % : Judul Skripsi diterima.</td>
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
