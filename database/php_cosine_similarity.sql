@@ -172,7 +172,7 @@ CREATE TABLE `uji_plagiarisme` (
   `id_uji_plagiarisme` int NOT NULL,
   `judul` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   `kemiripan` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `status` enum('RENDAH','SEDANG','TINGGI','TIDAK') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` enum('RENDAH','SEDANG','Judul Skripsi Ditolak','Judul Skripsi Diterima') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

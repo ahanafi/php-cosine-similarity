@@ -123,7 +123,7 @@ function isStopWords(string $term): string
 
 function getStatusKemiripan($tingkatKemiripan) : string {
     if ($tingkatKemiripan <= 0) {
-        return 'TIDAK';
+        return 'Judul Skripsi Diterima';
     }
 
     if ($tingkatKemiripan > 0 && $tingkatKemiripan <= 30) {
@@ -135,7 +135,7 @@ function getStatusKemiripan($tingkatKemiripan) : string {
     }
 
     if ($tingkatKemiripan > 60) {
-        return 'TINGGI';
+        return 'Judul Skripsi Ditolak';
     }
 
 }

@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/Responsive-2.2.1/css/responsive.bootstrap4.min.css">
 
 
-	<link rel="icon shortcut" href="<?php echo base_url('assets/img/logo.svg')?>">
+	<link rel="icon shortcut" href="<?php echo base_url('assets/img/ucic.svg')?>">
 	<link rel="stylesheet" href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css">
 
 

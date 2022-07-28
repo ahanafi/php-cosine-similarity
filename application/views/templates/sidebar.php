@@ -9,9 +9,11 @@ $uri2 = $this->uri->segment(2);
 		<div class="sidebar-brand border-bottom border-primary">
 			<a class="text-primary" href="<?= base_url('dashboard'); ?>">Aplikasi Plagiarisme</a>
 		</div>
+
 		<div class="sidebar-brand sidebar-brand-sm">
 			<a href="<?= base_url('dashboard'); ?>">AP</a>
 		</div>
+		
 		<ul class="sidebar-menu">
 			<li class="<?= $uri1 == '' || $uri1 == 'dashboard' ? 'active' : ''; ?>">
 				<a href="<?= base_url('dashboard'); ?>" class="nav-link">

@@ -6,16 +6,22 @@ $uri2 = $this->uri->segment(2);
 ?>
 <div class="main-sidebar sidebar-style-2">
 	<aside id="sidebar-wrapper">
-		<div class="sidebar-brand border-bottom border-primary">
-			<a class="text-primary" href="<?= base_url('cek-plagiarisme'); ?>">Aplikasi Plagiarisme</a>
+		<div class="sidebar-brand border-primary">
+
+			<img src="<?php echo base_url(); ?>assets/img/ucic.png" class="img-fluid" style="height: 100px;">
+						
+			<a class="navbar-brand brand-logo-mini" href="<?= base_url('cek-plagiarisme'); ?>"></a>
 		</div>
+
 		<div class="sidebar-brand sidebar-brand-sm">
-			<a href="<?= base_url('cek-plagiarisme'); ?>">AP</a>
+			<a href="<?= base_url('cek-plagiarisme'); ?>"></a>
 		</div>
-		<ul class="sidebar-menu">
+		<ul class="sidebar-menu mt-5">
+			 
+            <div class="form-group">
 			<li class="<?= $uri1 == 'cek-plagiarisme' && $uri2 == '' ? 'active' : ''; ?>">
 				<a href="<?= base_url('cek-plagiarisme'); ?>" class="nav-link">
-					<i class="fas fa-fire"></i><span>Cek Plagiarsime</span>
+					<i class="fas fa-fire"></i><span>Cek Plagiarisme</span>
 				</a>
 			</li>
 			<li class="dropdown <?= $uri2 == 'topik-skripsi' || $uri2 == 'topik' ? 'active' : ''; ?>">

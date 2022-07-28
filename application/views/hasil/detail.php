@@ -59,7 +59,7 @@
                             <h4><u>A. Tabel Sample Query</u></h4>
                             <div class="card-header-action">
                                 <a data-collapse="#sample-query" class="btn btn-icon btn-info" href="#">
-                                    <i class="fas fa-minus"></i>
+                                    <i class="fas fa-minus">Cek Perhitungan</i>
                                 </a>
                             </div>
                         </div>
