@@ -38,10 +38,17 @@
                                                 <td><?php echo $judul->status; ?></td>
                                                 <td><?php echo $judul->tanggal; ?></td>
                                                 <td class="text-center">
-                                                    <a href="<?php echo base_url('cek-plagiarisme/detail/' . $judul->id_uji_plagiarisme); ?>"
-                                                       class="btn btn-light">
-                                                        <i class="fa fa-search"></i>
-                                                    </a>
+                                                    <?php if (!isset($_SESSION['user']) && $this->uri->segment(1) === 'hasil-cek-plagiarisme'): ?>
+                                                        <a href="<?php echo base_url('detail-cek-plagiarisme/' . $judul->id_uji_plagiarisme); ?>"
+                                                           class="btn btn-light">
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <a href="<?php echo base_url('cek-plagiarisme/detail/' . $judul->id_uji_plagiarisme); ?>"
+                                                           class="btn btn-light">
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    <?php endif; ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

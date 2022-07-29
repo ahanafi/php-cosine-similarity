@@ -10,7 +10,13 @@ class Cek_plagiarisme extends CI_Controller
             'hasil_uji' => $this->Uji_plagiarisme->all(),
             'no' => 1
         ];
-        $this->main_lib->getTemplate('hasil/index', $data);
+        $uri1 = $this->uri->segment(1);
+
+        if (!isset($_SESSION['user']) && $uri1 === 'hasil-cek-plagiarisme') {
+            $this->main_lib->getTemplateMahasiswa('hasil/index', $data);
+        } else {
+            $this->main_lib->getTemplate('hasil/index', $data);
+        }
     }
 
     public function detail($idUjiPlagiarisme)
@@ -75,8 +81,8 @@ class Cek_plagiarisme extends CI_Controller
             $query
         );
 
-        // Hitung rata-rata di atas 60 persen
-        $rataRataSimilarity = $this->hitungRataRataSimilarityAbove60persen(
+        // Hitung rata-rata di atas 0 persen
+        $rataRataSimilarity = $this->hitungRataRataSimilarityAboveZeroPersen(
             $hitungCosineSimilarity,
             $arrJudul,
             $query
@@ -98,7 +104,13 @@ class Cek_plagiarisme extends CI_Controller
             'rata_rata_similarity' => $rataRataSimilarity,
         ];
 
-        $this->main_lib->getTemplate('hasil/detail', $data);
+        $uri1 = $this->uri->segment(1);
+
+        if (!isset($_SESSION['user']) && $uri1 === 'detail-cek-plagiarisme') {
+            $this->main_lib->getTemplateMahasiswa('hasil/detail', $data);
+        } else {
+            $this->main_lib->getTemplate('hasil/detail', $data);
+        }
     }
 
     /**
@@ -194,8 +206,8 @@ class Cek_plagiarisme extends CI_Controller
                 // );
                 // 
                 
-                // Hitung rata-rata di atas 60 persen
-                $rataRataSimilarity = $this->hitungRataRataSimilarityAbove60persen(
+                // Hitung rata-rata di atas 0 persen
+                $rataRataSimilarity = $this->hitungRataRataSimilarityAboveZeroPersen(
                     $hitungCosineSimilarity,
                     $arrJudul,
                     $query
@@ -504,13 +516,13 @@ class Cek_plagiarisme extends CI_Controller
 
 
     /**
-     * [hitungRataRataSimilarityAbove60persen description]
+     * [hitungRataRataSimilarityAboveZeroPersen description]
      * @param array $nilaiCosineSimilarity [description]
      * @param array $judulSkripsi [description]
      * @param string $query [description]
      * @return int [type]                        [description]
      */
-    private function hitungRataRataSimilarityAbove60persen(array $nilaiCosineSimilarity, array $judulSkripsi, string $query) : int
+    private function hitungRataRataSimilarityAboveZeroPersen(array $nilaiCosineSimilarity, array $judulSkripsi, string $query) : int
     {
         $totalNilai = 0;
         $banyakData = 0;
@@ -519,9 +531,9 @@ class Cek_plagiarisme extends CI_Controller
                 $key = 'cos_Q_D' . $i;
 
                 $nilaiCosine = $nilaiCosineSimilarity[$key];
-                $nilaiCosineSimilarityPersen = number_format($nilaiCosine * 100, 0);
+                $nilaiCosineSimilarityPersen = number_format($nilaiCosine * 100, 2);
 
-                if ($nilaiCosineSimilarityPersen >= 60) {
+                if ($nilaiCosineSimilarityPersen > 0) {
                     $totalNilai += $nilaiCosineSimilarity[$key];
                     $banyakData++;
                 }

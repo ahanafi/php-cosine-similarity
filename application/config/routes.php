@@ -19,3 +19,5 @@ $route['topik-skripsi/(:any)/(:num)'] = 'Topik/$1/$2';
 
 // ROUTE MAHASISWA
 $route['cek-plagiarisme'] = 'Cek_plagiarisme/index';
+$route['hasil-cek-plagiarisme'] = 'Cek_plagiarisme/hasil';
+$route['detail-cek-plagiarisme/(:num)'] = 'Cek_plagiarisme/detail/$1';
