@@ -6,15 +6,18 @@ $uri2 = $this->uri->segment(2);
 ?>
 <div class="main-sidebar sidebar-style-2">
 	<aside id="sidebar-wrapper">
-		<div class="sidebar-brand border-bottom border-primary">
-			<a class="text-primary" href="<?= base_url('dashboard'); ?>">Aplikasi Plagiarisme</a>
+		<div class="sidebar-brand border-primary mt-2">
+			
+			<img src="<?php echo base_url(); ?>assets/img/ucic.png" class="img-fluid" style="height: 100px;">
+
+            <a class="navbar-brand brand-logo-mini" href="<?= base_url('dashboard'); ?>"></a>
 		</div>
 
 		<div class="sidebar-brand sidebar-brand-sm">
 			<a href="<?= base_url('dashboard'); ?>">AP</a>
 		</div>
 		
-		<ul class="sidebar-menu">
+		<ul class="sidebar-menu mt-5">
 			<li class="<?= $uri1 == '' || $uri1 == 'dashboard' ? 'active' : ''; ?>">
 				<a href="<?= base_url('dashboard'); ?>" class="nav-link">
 					<i class="fas fa-fire"></i><span>Dashboard</span>

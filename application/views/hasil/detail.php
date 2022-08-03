@@ -332,7 +332,7 @@
                                         <th class="text-center">Judul Skripsi</th>
                                         <th class="text-center">Nilai Similarity</th>
                                         <th class="text-center">Nilai Similarity (%)</th>
-                                    </tr>
+                                    </tr> 
                                     </thead>
                                     <tbody>
                                     <?php

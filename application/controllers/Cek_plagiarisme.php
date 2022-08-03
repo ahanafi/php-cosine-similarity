@@ -120,7 +120,7 @@ class Cek_plagiarisme extends CI_Controller
     public function index()
     {
         $data = [
-            'title' => 'Form Mahasiswa'
+            'title' => 'SDKJ PRODI SI'
         ];
 
         if (isset($_POST['check'])) {

@@ -6,7 +6,7 @@ $uri2 = $this->uri->segment(2);
 ?>
 <div class="main-sidebar sidebar-style-2" id="main-sidebar">
     <aside id="sidebar-wrapper">
-        <div class="sidebar-brand border-primary">
+        <div class="sidebar-brand border-primary mt-2">
 
             <img src="<?php echo base_url(); ?>assets/img/ucic.png" class="img-fluid" style="height: 100px;">
 
@@ -19,11 +19,11 @@ $uri2 = $this->uri->segment(2);
         <ul class="sidebar-menu mt-5">
 
             <div class="form-group">
-                <li class="<?= $uri1 == 'cek-plagiarisme' && $uri2 == '' ? 'active' : ''; ?>">
+               <!-- <li class="<?= $uri1 == 'cek-plagiarisme' && $uri2 == '' ? 'active' : ''; ?>">
                     <a href="<?= base_url('cek-plagiarisme'); ?>" class="nav-link">
                         <i class="fas fa-fire"></i><span>Cek Plagiarisme</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="<?= $uri1 == 'hasil-cek-plagiarisme' && $uri2 == '' ? 'active' : ''; ?>">
                     <a href="<?= base_url('hasil-cek-plagiarisme'); ?>" class="nav-link">
                         <i class="fas fa-check-double"></i><span>Hasil Cek Plagiarisme</span>

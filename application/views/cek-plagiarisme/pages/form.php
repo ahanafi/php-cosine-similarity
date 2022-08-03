@@ -67,7 +67,7 @@
                                         <th class="text-center">Notasi</th>
                                         <th class="text-center">Judul Skripsi yang mirip</th>
                                         <th class="text-center">Nilai Similarity</th>
-                                        <th class="text-center">Nilai Similarity (%)</th>
+                                        <th class="text-center">Nilai Similarity (%)1</th>
                                     </tr>
                                     </thead>
                                     <tbody>

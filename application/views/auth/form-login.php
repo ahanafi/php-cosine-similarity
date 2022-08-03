@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <head>
     <meta charset="UTF-8">
     
-    <title><?php echo $title; ?> &mdash;</title>
+    <title><?php echo $title; ?></title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap/css/bootstrap.min.css">
@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
-	<link rel="icon shortcut" href="<?php echo base_url('assets/img/logo.svg')?>">
+	<link rel="icon shortcut" href="<?php echo base_url('assets/img/login.png')?>">
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- /END GA --></head>
 <style>
     body {
-        background: url("<?php echo base_url('assets/img/bg.jpg'); ?>") !important;
+        background: url("<?php echo base_url('assets/img/22.jpg'); ?>") !important;
         background-size: cover;
         background-position: center;
     }

@@ -42,8 +42,11 @@
                     <div class="card-header">
                         <h4>Halaman Dashboard</h4>
                     </div>
-                    <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 280px;">
-                        Hallo hallo bandung... 
+                    <div class="card-body d-flex justify-content-center" style="min-height:400px;">
+                        Selamat datang di Sistem Deteksi Kemiripan Judul Skripsi Pada Program Studi Sistem Informasi      
+                    </div>
+                    <div class="card-body d-flex justify-content-center" style="min-height: 280px;">
+                        Selamat datang di Sistem Deteksi Kemiripan Judul Skripsi Pada Program Studi Sistem Informasi      
                     </div>
                 </div>                
             </div>
