@@ -12,7 +12,7 @@ class Cek_plagiarisme extends CI_Controller
         ];
         $uri1 = $this->uri->segment(1);
 
-        if (!isset($_SESSION['user']) && $uri1 === 'hasil-cek-plagiarisme') {
+        if ($uri1 === 'hasil-cek-plagiarisme') {
             $this->main_lib->getTemplateMahasiswa('hasil/index', $data);
         } else {
             $this->main_lib->getTemplate('hasil/index', $data);
@@ -106,7 +106,7 @@ class Cek_plagiarisme extends CI_Controller
 
         $uri1 = $this->uri->segment(1);
 
-        if (!isset($_SESSION['user']) && $uri1 === 'detail-cek-plagiarisme') {
+        if ($uri1 === 'detail-cek-plagiarisme') {
             $this->main_lib->getTemplateMahasiswa('hasil/detail', $data);
         } else {
             $this->main_lib->getTemplate('hasil/detail', $data);
@@ -198,20 +198,33 @@ class Cek_plagiarisme extends CI_Controller
                     $query
                 );
 
-                // Hitung Rata-rata nilai similarity (Semua dihitung)
-                // $rataRataSimilarity = $this->hitungRataRataSimilarity(
-                //     $hitungCosineSimilarity,
-                //     $arrJudul,
-                //     $query
-                // );
-                // 
-                
-                // Hitung rata-rata di atas 0 persen
-                $rataRataSimilarity = $this->hitungRataRataSimilarityAboveZeroPersen(
+                $isFoundSimilarityAbove60percent = $this->filterSimilarityAbove60Percent(
                     $hitungCosineSimilarity,
                     $arrJudul,
                     $query
                 );
+
+                // Jika tidak ada judul yang mirip > 60
+                if ($isFoundSimilarityAbove60percent === 0 && !is_array($isFoundSimilarityAbove60percent)) {
+                    // Hitung rata-rata di atas 0 persen
+                    $rataRataSimilarity = $this->hitungRataRataSimilarityAboveZeroPersen(
+                        $hitungCosineSimilarity,
+                        $arrJudul,
+                        $query
+                    );
+                } else {
+                    $data['is_found_similarity_above_standard'] = 1;
+                    $judulTerkait = $isFoundSimilarityAbove60percent['judul'];
+                    $judulSkripsiTerkait = $this->Judul_skripsi->getDataByJudul($judulTerkait);
+                    $idJudulSkripsiTerkait = $judulSkripsiTerkait->id_judul_skripsi;
+
+                    $rataRataSimilarity = [
+                        'nilai' => $isFoundSimilarityAbove60percent['similarity'],
+                        'id_judul_skripsi_terkait' => $idJudulSkripsiTerkait
+                    ];
+
+                    $data['judul_terkait'] = $judulSkripsiTerkait;
+                }
 
                 // Update nilai kemiripan
                 $this->Uji_plagiarisme->updateSimilarity($rataRataSimilarity, trim($judul));
@@ -222,6 +235,7 @@ class Cek_plagiarisme extends CI_Controller
                 $data['result_tfidfPower'] = $tfIdfPower;
                 $data['nilai_cosine_similarity'] = $hitungCosineSimilarity;
                 $data['rata_rata_similarity'] = $rataRataSimilarity;
+                $data['hasil_uji'] = $this->Uji_plagiarisme->getDataByJudul(trim($judul));
 
                 $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
             }
@@ -229,8 +243,6 @@ class Cek_plagiarisme extends CI_Controller
         } else {
             $this->main_lib->getTemplateMahasiswa('cek-plagiarisme/pages/form', $data);
         }
-
-
     }
 
     /**
@@ -542,6 +554,36 @@ class Cek_plagiarisme extends CI_Controller
 
         $totalNilai = number_format($totalNilai * 100, 0);
         return ($banyakData > 0) ? $totalNilai / $banyakData : $banyakData;
+    }
+
+    /**
+     * @param array $nilaiCosineSimilarity
+     * @param array $judulSkripsi
+     * @param string $query
+     * @return array|int
+     */
+    private function filterSimilarityAbove60Percent(array $nilaiCosineSimilarity, array $judulSkripsi, string $query)
+    {
+        $isFoundSimilarityAboveStandardValue = 0; // FALSE
+
+        for ($i = 1; $i < count($judulSkripsi); $i++) {
+            if (strtolower($judulSkripsi[$i]) !== strtolower($query)) {
+                $key = 'cos_Q_D' . $i;
+                $nilaiCosine = $nilaiCosineSimilarity[$key];
+                $nilaiCosineSimilarityPersen = number_format($nilaiCosine * 100, 2);
+
+                if ($nilaiCosineSimilarityPersen > 60) {
+                    $keyJudul = 'judul_D' . $i;
+                    $isFoundSimilarityAboveStandardValue = [
+                        'judul' => $nilaiCosineSimilarity[$keyJudul],
+                        'similarity' => $nilaiCosineSimilarityPersen
+                    ];
+                    break;
+                }
+            }
+        }
+
+        return $isFoundSimilarityAboveStandardValue;
     }
 
     public function topik_skripsi()

@@ -25,13 +25,31 @@ class Uji_plagiarisme_model extends Main_model {
 
     public function updateSimilarity($nilai, $judul)
     {
-        $status = getStatusKemiripan($nilai);
-        return $this->update([
-            'kemiripan' => $nilai,
-            'status' => $status,
-        ], [
+        if (is_array($nilai)) {
+            $status = getStatusKemiripan($nilai['nilai']);
+            $data = [
+                'kemiripan' => $nilai['nilai'],
+                'status' => $status,
+                'id_judul_skripsi_terkait' => $nilai['id_judul_skripsi_terkait'],
+            ];
+        } else {
+            $status = getStatusKemiripan($nilai);
+            $data = [
+                'kemiripan' => $nilai,
+                'status' => $status,
+            ];
+        }
+
+        return $this->update($data, [
             'LOWER(judul)' => strtolower($judul)
         ]);
+    }
+
+    public function getDataByJudul($judul)
+    {
+        $judulLowerCase = strtolower($judul); // konversi ke lower case
+        $query = $this->rawQuery("SELECT * FROM $this->table WHERE LOWER(`judul`) = '$judulLowerCase' LIMIT 1");
+        return $query->row();
     }
 
 }

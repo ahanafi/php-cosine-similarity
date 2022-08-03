@@ -26,10 +26,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <i class="far fa-user"></i>
 							<span> Profil</span>
                         </a>
-                        <a href="<?php echo base_url('user/change-password'); ?>" class="dropdown-item has-icon">
-                            <i class="fas fa-cog"></i>
-							<span>Ubah Password</span>
-                        </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" onclick="showConfirmLogout()" class="dropdown-item has-icon text-danger">
                             <i class="fas fa-sign-out-alt"></i> Logout

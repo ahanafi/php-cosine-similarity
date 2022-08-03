@@ -56,7 +56,7 @@
                                         <select name="level" id="inputSelect" required class="form-control">
                                             <option disabled selected>-- Pilih Level Pengguna --</option>
                                             <?php foreach ($user_levels as $level): ?>
-                                                <option <?= ($user->level == $level) ? 'selected' : ''; ?>
+                                                <option <?= (strtolower($user->level) === strtolower($level)) ? 'selected' : ''; ?>
                                                         value="<?php echo $level; ?>"><?php echo ucwords(strtolower(str_replace("_", " ", $level))); ?></option>
                                             <?php endforeach; ?>
                                         </select>

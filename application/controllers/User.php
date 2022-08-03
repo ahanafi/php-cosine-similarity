@@ -28,10 +28,8 @@ class User extends CI_Controller
         provideAccessTo("1");
 
         $list_user_levels = [
-            'SUPER_USER',
-            'ADMIN_TOKO',
-            'ADMIN_KEUANGAN',
-            'ADMIN_SUPPLIER'
+            'KAPRODI',
+            'ADMIN'
         ];
 
         $data = [
@@ -86,11 +84,10 @@ class User extends CI_Controller
         }
 
         $list_user_levels = [
-            'SUPER_USER',
-            'ADMIN_TOKO',
-            'ADMIN_KEUANGAN',
-            'ADMIN_SUPPLIER'
+            'KAPRODI',
+            'ADMIN'
         ];
+
         $user = $this->User->findById(['id_pengguna' => $user_id]);
         $data = [
             'title' => 'Edit Pengguna',
@@ -182,7 +179,7 @@ class User extends CI_Controller
             [
                 'field' => 'username',
                 'label' => 'Username',
-                'rules' => 'required|is_unique[pengguna.username]|min_length[6]|max_length[30]'
+                'rules' => 'required|is_unique[pengguna.username]'
             ],
             [
                 'field' => 'email',
@@ -216,7 +213,7 @@ class User extends CI_Controller
                 [
                     'field' => 'username',
                     'label' => 'Username',
-                    'rules' => 'required|min_length[6]|max_length[30]'
+                    'rules' => 'required'
                 ],
                 [
                     'field' => 'email',

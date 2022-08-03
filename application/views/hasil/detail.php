@@ -355,11 +355,19 @@
                                     <?php endfor; ?>
                                     </tbody>
                                     <tfoot>
-                                    <tr>
-                                        <th colspan="3">RATA-RATA NILAI SIMILARITY Q</th>
-                                        <th class="text-center"><?php echo number_format($rata_rata_similarity / 100, 2) ?></th>
-                                        <th class="text-center"><?php echo $rata_rata_similarity ?></th>
-                                    </tr>
+                                    <?php if(isset($judul->id_judul_skripsi_terkait) && $judul->id_judul_skripsi_terkait !== null): ?>
+                                        <tr>
+                                            <th colspan="3">NILAI SIMILARITY Q</th>
+                                            <th class="text-center"><?php echo number_format($judul->kemiripan, 2) ?></th>
+                                            <th class="text-center"><?php echo $judul->kemiripan ?></th>
+                                        </tr>
+                                    <?php else: ?>
+                                        <tr>
+                                            <th colspan="3">RATA-RATA NILAI SIMILARITY Q</th>
+                                            <th class="text-center"><?php echo number_format($rata_rata_similarity / 100, 2) ?></th>
+                                            <th class="text-center"><?php echo $rata_rata_similarity ?></th>
+                                        </tr>
+                                    <?php endif; ?>
                                     </tfoot>
                                 </table>
                             </div>
