@@ -11,11 +11,7 @@ Class Main_lib {
 
     public function  isLogin()
 	{
-		if ($this->ci->session->is_logged_in === TRUE) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->ci->session->is_logged_in;
 	}
 
 	public function getPost($key)
@@ -33,7 +29,7 @@ Class Main_lib {
 				'username'	=> 'ahanafi',
 				'email'		=> 'ahanafi@mail.com',
 				'password'	=> password_hash(123456, PASSWORD_DEFAULT),
-				'level'		=> 'SUPER_USER',
+				'level'		=> 'ADMIN',
 			];
 
 			return $this->ci->db->insert('pengguna', $data_users);

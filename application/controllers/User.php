@@ -14,7 +14,6 @@ class User extends CI_Controller
 
     public function index()
     {
-        provideAccessTo("1");
         $data = [
             'title' => 'Data Pengguna',
             'users' => $this->User->all(),
@@ -25,7 +24,6 @@ class User extends CI_Controller
 
     public function create()
     {
-        provideAccessTo("1");
 
         $list_user_levels = [
             'KAPRODI',
@@ -77,7 +75,6 @@ class User extends CI_Controller
 
     public function edit($user_id)
     {
-        provideAccessTo("1");
 
         if (empty(trim($user_id))) {
             redirect(base_url('user'));
@@ -134,7 +131,6 @@ class User extends CI_Controller
 
     public function delete($user_id)
     {
-        provideAccessTo("1");
         if (isset($_POST['_method']) && $_POST['_method'] == "DELETE") {
             $data_id = $this->main_lib->getPost('data_id');
             $data_type = $this->main_lib->getPost('data_type');

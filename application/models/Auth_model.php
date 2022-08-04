@@ -7,17 +7,12 @@ class Auth_model extends User_model {
 
 	public function login($credentials)
 	{
-		$sql = $this->db->get_where($this->table, [
-			'email' => $credentials['email']
-		]);
-		$check = $sql->num_rows();
-
-		if($check > 0) {
-			$data = $sql->row();
-			$validate = password_verify($credentials['password'], $data->password);
+		$user = $this->getBy('email',$credentials['email']);
+		if($user !== null) {
+			$validate = password_verify($credentials['password'], $user->password);
 
 			if($validate) {
-				$this->session->set_userdata("user", $data);
+				$this->session->set_userdata("user", $user);
 				$this->session->set_userdata("is_logged_in", TRUE);
 				return true;
 			} else {
